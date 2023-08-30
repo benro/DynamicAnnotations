@@ -1,0 +1,268 @@
+import { useState } from 'react'
+
+import { useRef } from 'react';
+
+import {
+  Chart as ChartJS,
+  CategoryScale,
+  LinearScale,
+  BarElement,
+  Title,
+  Tooltip,
+  Legend
+
+} from 'chart.js';
+import { Bar, Chart, getDatasetAtEvent } from 'react-chartjs-2';
+
+import reactLogo from './assets/react.svg'
+import viteLogo from '/vite.svg'
+
+import './App.css'
+import annotationPlugin from 'chartjs-plugin-annotation';
+
+ChartJS.register(
+  CategoryScale,
+  LinearScale,
+  BarElement,
+  Title,
+  Tooltip,
+  Legend,
+  annotationPlugin
+);
+
+// const annotation1 = {
+//   type: 'line',
+//   scaleID: 'x',
+//   borderWidth: 3,
+//   borderColor: 'black',
+//   value: 0.5,
+//   label: {
+//     content: 'Line annotation at x=0.5',
+//     display: true
+//   },
+// };
+
+
+//  const annotation2 = {
+//   type: 'label' as const,
+//   xValue: 2.5,
+//   yValue: 60,
+//   backgroundColor: 'rgba(245,245,245)',
+//   content: ['This is a second label'],
+//   font: {
+//     size: 30
+//   }
+// };
+
+const lines = new Array();
+let theCount = 0;
+
+export const options = {
+  onClick: (event, elements, chart) => {
+    console.log("clicked" + event.x);
+    if (elements[0]) {
+      const i = elements[0].index;
+      alert(chart.data.labels[i] + ': ' + chart.data.datasets[0].data[i]);
+    }
+
+console.log(theCount)
+    // // Substitute the appropriate scale IDs
+    const dataX = chart.scales.x.getValueForPixel(event.x);
+    const dataY = chart.scales.y.getValueForPixel(event.y);
+    
+// lines.push(annotation1);
+// lines.push(annotation2);
+    lines.push({
+
+      type: 'label' as const,
+      xValue: dataX,
+      yValue: dataY,
+      backgroundColor: 'rgba(245,245,245)',
+      content: ['This is a second label'],
+      font: {
+        size: 10
+      }
+
+    });
+
+    chart.update();
+
+    // chart.options.plugins.annotation.annotations['label1'] = {
+      
+    //   type: 'label' as const,
+    //   xValue: 2.5,
+    //   yValue: 120,
+    //   backgroundColor: 'rgba(245, 40, 145, 0.8)',
+    //   content: ['New Label'],
+    //   font: {
+    //     size: 10
+    //   }
+
+    // }
+    //   chart.options.plugins.annotation.annotations['label2'] = {
+      
+    //     type: 'label' as const,
+    //     xValue: 7,
+    //     yValue: 120,
+    //     backgroundColor: 'rgba(245, 40, 145, 0.8)',
+    //     content: ['New Label 2'],
+    //     font: {
+    //       size: 10
+    //     }
+  
+    // }
+
+    chart.update();
+
+
+  },
+  responsive: true,
+  events: ['click'],
+  plugins: {
+    legend: {
+      position: 'top' as const,
+    },
+    title: {
+      display: true,
+      text: 'Chart.js Bar Chart',
+    },
+    annotation: {
+      annotations: 
+        // annotation1,
+        // label1: {
+        //   type: 'label',
+        //   xValue: 2.5,
+        //   yValue: 60,
+        //   backgroundColor: 'rgba(245,245,245)',
+        //   content: ['This is my text', 'This is my text, second line'],
+        //   font: {
+        //     size: 18
+        //   }
+        // },
+        // annotation2
+
+        lines
+
+      
+    }
+
+
+    //   onClick: function(evt, element) {
+    //     console.log("clicked")
+    //          if(element.length > 0) {
+    //              console.log(element,element[0]._datasetInde)
+    //              // you can also get dataset of your selected element
+    //              console.log(data.datasets[element[0]._datasetIndex])
+    //          }
+    //  }
+
+
+    //     onClick: (e) => {
+    //       chart = Chart.getChart()
+    //         const canvasPosition = Chart.helpers.getRelativePosition(e, chart);
+
+    //         // Substitute the appropriate scale IDs
+    //         const dataX = chart.scales.x.getValueForPixel(canvasPosition.x);
+    //         const dataY = chart.scales.y.getValueForPixel(canvasPosition.y);
+    //         alert("clicked!");
+    //     } 
+  }
+};
+
+const labels = ['January', 'February', 'March', 'April', 'May', 'June', 'July'];
+
+
+
+export const data = {
+  labels,
+  datasets: [
+    {
+      label: 'Dataset 1',
+      data: [65, 59, 80, 81, 56, 55, 40],
+      backgroundColor: 'rgba(255, 99, 132, 0.5)',
+    },
+    {
+      label: 'Dataset 2',
+      data: [635, 529, 80, 831, 356, 535, 340],
+      backgroundColor: 'rgba(53, 162, 235, 0.5)',
+    },
+  ],
+};
+
+function App() {
+  const [count, setCount] = useState(0)
+  theCount=count;
+
+  // const [myAnnotation, setAnnotation] = React.useState();
+
+
+
+  // const chartRef = useRef();
+
+  // const onClick = (event, elements, chart) => {
+  //   //console.log(getDatasetAtEvent(chartRef.current, event));
+  //   console.log("click!");
+
+  //    if (elements[0]) {            
+  //        const i = elements[0].index;
+  //        alert(chart.data.labels[i] + ': ' + chart.data.datasets[0].data[i]);
+  //     }
+
+  //   // chartRef.current.
+
+  //   // chartRef.current.options.plugins.annotation.annotations['newAnnotation'] = {
+  //   //   type: 'line',
+  //   //   label: {
+  //   //     enabled: true,
+  //   //     backgroundColor: '#555555',
+  //   //     borderRadius: 0,
+  //   //     color: 'white',
+  //   //     content: 20
+  //   //   },
+  //   //   xMin: 1.5,
+  //   //   xMax: 2.5,
+  //   //   yMin: 20,
+  //   //   yMax: 20,
+  //   //   backgroundColor: 'red',
+  //   //   borderColor: 'red',
+  //   //   borderWidth: 1
+  //   // };
+  //   // chart.update();
+
+
+  // }
+
+  return (
+    <>
+      <div>
+        <a href="https://vitejs.dev" target="_blank">
+          <img src={viteLogo} className="logo" alt="Vite logo" />
+        </a>
+        <a href="https://react.dev" target="_blank">
+          <img src={reactLogo} className="logo react" alt="React logo" />
+        </a>
+      </div>
+      <h1>Vite + React</h1>
+      <div className="card">
+        <button onClick={() => setCount((count) => count + 1)}>
+          count is {count}
+        </button>
+        <p>
+          Edit <code>src/App.tsx</code> and save to test HMR
+        </p>
+      </div>
+      <p className="read-the-docs">
+        Click on the Vite and React logos to learn more and more
+        safasdfasdfasdf
+      </p>
+      {/* <Bar options={options} data={data} onClick={onClick} /> */}
+      {/* <input    placeholder="Enter Annotation"
+        type="string"
+        value={myAnnotation}
+        onChange={(e) => setAnnotation(+e.target.value)}/> */}
+      <Bar options={options} data={data} />
+    </>
+  )
+}
+
+export default App
